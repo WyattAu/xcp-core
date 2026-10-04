@@ -1,0 +1,53 @@
+[package]
+name = "xcp-core"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.85"
+authors = ["Wyatt Au <wyatt_au@protonmail.com>"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/WyattAu/xcp-core"
+homepage = "https://github.com/WyattAu/xcp-core"
+documentation = "https://docs.rs/xcp-core"
+description = "XCP on CAN — Universal Measurement and Calibration Protocol: commands, responses, DAQ lists"
+readme = "README.md"
+keywords = ["xcp", "can", "calibration", "automotive", "no-std"]
+categories = ["encoding", "parser-implementations", "no-std", "embedded"]
+exclude = [".github/", "fuzz/", "supply-chain/"]
+
+# Layer model: docs/layers.md in WyattAu/engineering-standards.
+# L1 — substrate: XCP protocol codec over the can-core L0 frame layer; the
+# only estate-internal dependency is can-core (L0), which is legal upward
+# (L1 sits on L0).
+[package.metadata.layers]
+tier = "L1"
+
+# can-core provides the CAN transport framing (XCP part 3); thiserror 2.x is
+# no_std by default for the typed error taxonomy. Everything else — the CTO
+# command table, response parsing, DAQ list framing, byte-order handling — is
+# hand-rolled over `core` + `alloc`.
+[dependencies]
+can-core = { version = "0.1", default-features = false }
+thiserror = { version = "2", default-features = false }
+
+[dev-dependencies]
+proptest = "1"
+
+[lints.rust]
+missing_docs = "deny"
+unsafe_code = "deny"
+
+# Tier A decoder discipline: xcp-core parses CTO packets that originate from
+# CAN buses and hostile replay captures. The codec is "never panics on
+# input": bounds are checked at every access and errors are typed and
+# exhaustive. The fuzz/dev targets lift these at the file level with
+# justification; the lib target never does.
+[lints.clippy]
+unwrap_used = "deny"
+expect_used = "deny"
+panic = "deny"
+indexing_slicing = "deny"
+undocumented_unsafe_blocks = "deny"
+
+[profile.release]
+lto = "fat"
+codegen-units = 1
