@@ -1,9 +1,9 @@
 # xcp-core
 
-XCP on CAN — Universal Measurement and Calibration Protocol: commands,
+XCP on CAN: Universal Measurement and Calibration Protocol: commands,
 responses, DAQ lists.
 
-**Layer:** L1 — substrate · **Estate deps:** `can-core` (L0) · **Runtime
+**Layer:** L1: substrate · **Estate deps:** `can-core` (L0) · **Runtime
 deps:** `can-core`, `thiserror` · `no_std` + `alloc` (CI exercises
 `thumbv7em-none-eabihf`).
 
@@ -11,18 +11,18 @@ deps:** `can-core`, `thiserror` · `no_std` + `alloc` (CI exercises
 
 | Module | Contents |
 |---|---|
-| `command` | [`XcpCommand`](https://docs.rs/xcp-core/latest/xcp_core/enum.XcpCommand.html) — the complete ASAM XCP part 1 CTO command table (CONNECT `0xFF` through `TIME_CORRELATION_PROPERTIES` `0xC6`, versions 1.0–1.5), with `code()` / total `from_code()` / spec `name()` |
-| `response` | `parse_response` / `parse_response_with` — total CTO response parser: RES (`0xFF`) decoded per the outstanding command (`Expect`), ERR (`0xFE`) mapped onto the typed error taxonomy, EV (`0xFD`) and SERV (`0xFC`) preserved |
-| `error` | `XcpError` — the exhaustive ASAM error-code table (`0x20` command unknown, `0x31` generic, `0x33` resource temporarily not accessible, …) plus transport-local structural errors |
+| `command` | [`XcpCommand`](https://docs.rs/xcp-core/latest/xcp_core/enum.XcpCommand.html): the complete ASAM XCP part 1 CTO command table (CONNECT `0xFF` through `TIME_CORRELATION_PROPERTIES` `0xC6`, versions 1.0–1.5), with `code()` / total `from_code()` / spec `name()` |
+| `response` | `parse_response` / `parse_response_with`: total CTO response parser: RES (`0xFF`) decoded per the outstanding command (`Expect`), ERR (`0xFE`) mapped onto the typed error taxonomy, EV (`0xFD`) and SERV (`0xFC`) preserved |
+| `error` | `XcpError`: the exhaustive ASAM error-code table (`0x20` command unknown, `0x31` generic, `0x33` resource temporarily not accessible, …) plus transport-local structural errors |
 | `frame` | Master-side builders: `connect`, `set_mta`, `upload` / `download` (SET_MTA + block-mode-chunked DOWNLOAD sequences), `short_upload` / `short_download`, `set_cal_page` / `get_cal_page` |
-| `daq` | `DaqList` — periodic-measurement configuration: event channel, prescaler, priority, timestamp/PID-off/stim mode bits, ODT entries; frames the full SET_DAQ_LIST_MODE + SET_DAQ_PTR/WRITE_DAQ sequence and the START_STOP run-control frames |
-| `byteorder` | `ByteOrder` — Intel (little-endian) and Motorola (big-endian) addressing per the CONNECT `COMM_MODE_BASIC` bit, `AddressGranularity` |
+| `daq` | `DaqList`: periodic-measurement configuration: event channel, prescaler, priority, timestamp/PID-off/stim mode bits, ODT entries; frames the full SET_DAQ_LIST_MODE + SET_DAQ_PTR/WRITE_DAQ sequence and the START_STOP run-control frames |
+| `byteorder` | `ByteOrder`: Intel (little-endian) and Motorola (big-endian) addressing per the CONNECT `COMM_MODE_BASIC` bit, `AddressGranularity` |
 | `resource` | `ResourceMode` (CAL/PAG, DAQ, STIM, PGM, DBG bit set) and `SessionStatus` (GET_STATUS session byte) |
-| `transport` | `XcpOnCan` — the XCP part 3 bridge: packets ↔ `can-core` frames, command/response/DAQ CAN-ID model, classic-CAN 8-byte cap |
+| `transport` | `XcpOnCan`: the XCP part 3 bridge: packets ↔ `can-core` frames, command/response/DAQ CAN-ID model, classic-CAN 8-byte cap |
 
 ## Guarantees
 
-- **Total parser**: `parse_response` never panics — bounds are checked at
+- **Total parser**: `parse_response` never panics: bounds are checked at
   every access (`first_chunk`/`split_first`, deny-level lints on the lib
   target), and every input resolves to a typed response or typed error.
   Covered by the `xcp_parse` cargo-fuzz target and 30 s CI fuzz smoke.
@@ -41,7 +41,7 @@ deps:** `can-core`, `thiserror` · `no_std` + `alloc` (CI exercises
 ```rust
 use xcp_core::{connect, parse_response_with, ByteOrder, Expect, ResourceMode};
 
-// CONNECT, normal mode — first frame of every session:
+// CONNECT, normal mode: first frame of every session:
 assert_eq!(connect(ResourceMode::CONNECT_NORMAL), [0xFF, 0x00]);
 
 // A real-world CONNECT response: DAQ+STIM+PGM, Intel byte order, 8-byte CTOs.
@@ -83,4 +83,4 @@ checked in CI.
 
 ## License
 
-MIT OR Apache-2.0 — see LICENSE-MIT and LICENSE-APACHE.
+MIT OR Apache-2.0: see LICENSE-MIT and LICENSE-APACHE.

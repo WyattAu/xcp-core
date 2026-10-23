@@ -1,4 +1,4 @@
-# Security Policy — xcp-core
+# Security Policy: xcp-core
 
 ## Supported versions
 
