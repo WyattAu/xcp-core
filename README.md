@@ -1,4 +1,5 @@
 # xcp-core
+[![Estate integration](https://github.com/WyattAu/estate-integration/actions/workflows/ci.yml/badge.svg)](https://github.com/WyattAu/estate-integration/actions/workflows/ci.yml)
 
 XCP on CAN: Universal Measurement and Calibration Protocol: commands,
 responses, DAQ lists.
