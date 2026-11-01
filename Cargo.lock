@@ -65,9 +65,9 @@ checksum = "fc652a48c352aef3ea3aed32080501cf3ef6ed5da78602a020c991775b0aff04"
 
 [[package]]
 name = "can-core"
-version = "0.1.0"
+version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "62ec72b4f55f13f504156a0081251a24779789329ef9bbb497beff800868708a"
+checksum = "a77fb1d36c805f469f9353b7740a1224ff41568dd4209e130e8b7e92201581d3"
 dependencies = [
  "thiserror",
 ]
